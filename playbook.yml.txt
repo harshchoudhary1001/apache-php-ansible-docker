@@ -1,0 +1,27 @@
+---
+ - name: creating container of apache and php
+   hosts: client1
+   tasks:
+    - name: copy dockerfile
+      copy:
+       src: /root/Dockerfile
+       dest: /root
+    - name: build the image from dockerfile
+      docker_image:
+        build:
+         path: /root
+        name: apache
+        tag: latest
+        source: build
+    - name: creating container
+      docker_container:
+        name: apache_php
+        image: apache
+        volumes:
+          - "/code:/var/www/html"
+        ports:
+          - "80:80"
+        state: started
+~
+~
+~
