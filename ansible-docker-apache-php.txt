@@ -1,0 +1,53 @@
+steps followed
+1.first i have install ansible 
+ yum install ansible
+2. cd /etc/ansible
+3. vi inventory.txt
+inside this file i create my inventory file for a fresh vm on local 
+keenable-client1  ansible_host=192.168.17.156 ansible_ssh_pass=root ansible_connection=ssh ansible_port=22 ansible_user=root
+save this file .
+then i made playbook to install docker on another machine
+image.png
+ then run this playbook by following command
+ansible-playbook playbook_docker.yml -i inventory.txt
+
+
+ ----------------------------------------------------------------------------------------------------------------------------------------
+  then i make playbook for  apache and php container
+
+---
+ - name: creating container of apache and php
+   hosts: client1
+   tasks:
+    - name: copy dockerfile
+      copy:                       # to copy dockerfile from ansible server to ansible client
+       src: /root/Dockerfile
+       dest: /root
+    - name: build the image from dockerfile # build image on ansible client side using dockerfile which is copied from host to client
+      docker_image:
+        build:
+         path: /root
+        name: apache
+        tag: latest
+        source: build
+    - name: creating container  # creating container from image
+      docker_container:
+        name: apache_php
+        image: apache
+        volumes:
+          - "/code:/var/www/html"   # /code is a directory where my project file is kept
+        ports:
+          - "80:80"    
+        state: started  # to that container keep running
+~
+~
+ then run this command:
+ 
+ansible-playbook playbook.ym -i inventory.txt
+------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT: CLIENT IP IS 192.168.17.156
+
+
+image.png
+
