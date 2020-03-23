@@ -10,7 +10,10 @@ then i made playbook to install docker on another machine
 image.png
  then run this playbook by following command
 ansible-playbook playbook_docker.yml -i inventory.txt
-
+ 
+ NOTE: BEFORE THIS INSTALL
+ # yum install python-pip
+ #pip install docker on client and server side.
 
  ----------------------------------------------------------------------------------------------------------------------------------------
   then i make playbook for  apache and php container
